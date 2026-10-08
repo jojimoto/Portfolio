@@ -4,7 +4,7 @@ A personal portfolio for Gideon Lanz Arias, a BSIS student focused on business a
 
 ## About
 
-The site presents Gideon's background, skills, and experience in a black, scarlet, and white visual theme, with an animated geometric GA monogram.
+The site presents Gideon's background, skills, and experience in a black, scarlet, and white visual theme, with an animated geometric GA monogram and a subtle scanner-style background.
 
 ## Run locally
 
