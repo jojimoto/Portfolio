@@ -14,6 +14,7 @@ Open `index.html` in a browser. The site is built with HTML, CSS, and vanilla Ja
 
 - About
 - Skills: Business Analysis, Vibe Coding, Systems Thinking
+- Interactive gallery with three flip cards
 - Experience
 - Contact
 
