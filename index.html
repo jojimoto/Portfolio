@@ -65,15 +65,17 @@
     @keyframes pulse{50%{opacity:.35}}
     .intro{color:#d3d8da;font-size:16px;line-height:1.65;margin-top:14px}
     .actions{display:flex;align-items:center;justify-content:center;gap:24px;margin-top:28px;flex-wrap:wrap}
-    .button{display:inline-block;border:0;background:var(--red);color:#100808;padding:13px 22px;border-radius:999px;font:500 14px var(--sans);cursor:pointer;transition:background .2s,transform .2s}
-    .button:hover{background:#ff3644;box-shadow:0 0 30px #f0182855}
+    .button{display:inline-block;border:0;background:var(--red);color:#ffffff;padding:13px 22px;border-radius:999px;font:500 14px var(--sans);cursor:pointer;transition:background .2s,transform .2s}
+    .button:hover{background:#c9121f;box-shadow:0 0 30px #f0182855}
     .text-link{font-size:14px;font-weight:500;border-bottom:1px solid var(--line);padding-bottom:2px;transition:border-color .2s}
     .text-link:hover{border-color:var(--ink)}
-    .avatar{order:0;margin-bottom:28px;position:relative;flex:none;width:clamp(150px,16vw,200px);aspect-ratio:1;border-radius:8px;background:transparent;display:grid;place-items:center;overflow:hidden}
+    .avatar-wrap{order:0;margin-bottom:28px;display:flex;flex-direction:column;align-items:center;gap:14px}.avatar{position:relative;flex:none;width:clamp(150px,16vw,200px);aspect-ratio:1;border-radius:8px;background:transparent;display:grid;place-items:center;overflow:hidden}
     .avatar svg{width:62%;height:auto;filter:drop-shadow(0 0 9px #f43f5e66) drop-shadow(0 2px 16px #070000d9)}
+.avatar:not(:has(.avatar-photo)){aspect-ratio:320/150}
+.avatar:not(:has(.avatar-photo)) svg{width:92%}
     .electric{position:absolute;inset:0;width:100%;height:100%;mix-blend-mode:screen;pointer-events:none}
     .avatar-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-    .avatar-cap{position:absolute;left:12px;bottom:10px;font-size:11px;color:#ffffffa6}
+    .avatar-cap{font-size:11px;color:#ffffffa6;letter-spacing:.03em;white-space:nowrap}
 
     /* sections */
     .content{padding:96px 0;border-top:1px solid var(--line);background:#070000b8}
@@ -170,9 +172,9 @@
     @media(max-width:760px){
       .wrap{width:calc(100% - 36px)}
       .nav{height:auto;padding:10px 0;flex-wrap:wrap;gap:6px 20px}
-      .nav-links{width:100%;gap:18px}
+      .nav-links{width:100%;gap:8px 18px;flex-wrap:wrap;justify-content:center;overflow-x:visible}
       .hero{padding:32px 0 56px}
-      .avatar{width:140px;margin-bottom:22px}
+      .avatar{width:140px}.avatar-wrap{margin-bottom:22px}
       .hero-copy{margin-top:28px}
       .avail{margin:8px 0 0;display:flex;justify-content:center}
       .content{padding:68px 0}
@@ -253,10 +255,12 @@
           <p class="intro">I connect business needs with thoughtful digital solutions—turning ideas, workflows, and opportunities into systems people can use.</p>
           <div class="actions"><a class="button" href="#contact">Let’s connect</a><a class="text-link" href="#about">Explore portfolio ↓</a></div>
         </div>
-        <div class="avatar" aria-label="Profile picture of Gideon Lanz Arias">
-          <svg viewBox="0 0 320 150" role="img" aria-label="G A monogram"><path fill="#e11d2e" d="M72 16h99l-22 29H80c-40 0-40 61 0 61h38l13-19H82l20-26h77l-27 75H72C4 136 4 16 72 16Z"/><path fill="#f3f5f6" d="m174 136 57-107c9-17 25-17 34 0l55 107h-42l-31-61-35 61h-38Z"/></svg>
-          <!-- Drop your photo in as profile.jpg (same folder) and it replaces the monogram automatically. -->
-          <img class="avatar-photo" src="profile.jpg" alt="Portrait of Gideon Lanz Arias" onerror="this.remove()">
+        <div class="avatar-wrap">
+          <div class="avatar" aria-label="Profile picture of Gideon Lanz Arias">
+            <svg viewBox="0 0 320 150" role="img" aria-label="G A monogram"><path fill="#e11d2e" d="M72 16h99l-22 29H80c-40 0-40 61 0 61h38l13-19H82l20-26h77l-27 75H72C4 136 4 16 72 16Z"/><path fill="#f3f5f6" d="m174 136 57-107c9-17 25-17 34 0l55 107h-42l-31-61-35 61h-38Z"/></svg>
+            <!-- Drop your photo in as profile.jpg (same folder) and it replaces the monogram automatically. -->
+            <img class="avatar-photo" src="profile.jpg" alt="Portrait of Gideon Lanz Arias" onerror="this.remove()">
+          </div>
           <span class="avatar-cap">Based in Philippines</span>
         </div>
       </div>
@@ -412,7 +416,7 @@
     let W,H,dpr,s,ox,oy,C=[],bolts=[],vis=true,hover=false,last=0;
     function build(){
       const tr=tile.getBoundingClientRect(),sr=svg.getBoundingClientRect();
-      W=tr.width;H=tr.height;dpr=Math.min(devicePixelRatio||1,2);cv.width=W*dpr;cv.height=H*dpr;
+      W=tr.width;H=tr.height;dpr=Math.min(Math.max(devicePixelRatio||1,2),3);cv.width=W*dpr;cv.height=H*dpr;
       s=sr.width/320;ox=sr.left-tr.left;oy=sr.top-tr.top;
       C=paths.map(p=>{
         const L=p.getTotalLength(),n=Math.max(48,Math.round(L/2)),pts=[];
@@ -464,6 +468,8 @@
     tile.addEventListener('pointerenter',()=>hover=true);tile.addEventListener('pointerleave',()=>hover=false);
     let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(build,120)});
     const img=tile.querySelector('.avatar-photo');
+    if(img){img.addEventListener('load',build);img.addEventListener('error',build)}
+    if('ResizeObserver'in window)new ResizeObserver(()=>build()).observe(tile);
     build();if(!reduce)requestAnimationFrame(loop);
   })();
   </script>
